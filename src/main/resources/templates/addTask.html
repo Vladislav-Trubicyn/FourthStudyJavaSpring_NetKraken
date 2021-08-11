@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание технического задания</title>
+</head>
+<body>
+<h3>Создание технического задания</h3>
+<form th:method="post" th:action="@{/tasks/add}" th:object="${task}">
+    <label>Заголовок задания: <input type="text" th:field="*{title}"/></label><br>
+    <label>Описание задания: <textarea  th:field="*{description}"/></label><br>
+    <label>Количество программистов: <input type="number" th:field="*{countProgrammers}"/></label><br><br>
+    <input type="submit" value="Отправить">
+</form>
+</body>
+</html>

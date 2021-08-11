@@ -17,6 +17,10 @@ public class User implements UserDetails
     private String username;
     private String password;
     private boolean action;
+    private boolean status;
+
+    @Transient
+    private Long selectedId;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -71,6 +75,26 @@ public class User implements UserDetails
     public void setRoles(Set<Role> roles)
     {
         this.roles = roles;
+    }
+
+    public boolean isStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(boolean status)
+    {
+        this.status = status;
+    }
+
+    public Long getSelectedId()
+    {
+        return selectedId;
+    }
+
+    public void setSelectedId(Long selectedId)
+    {
+        this.selectedId = selectedId;
     }
 
     @Override

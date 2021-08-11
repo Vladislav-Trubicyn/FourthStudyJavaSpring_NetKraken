@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Технические задания</title>
+</head>
+<body>
+<h3>Технические задания</h3>
+<th:block th:each="task : ${tasks}">
+    <div th:text="'Задание: ' + ${task.getTitle()}"></div>
+    <a th:href="@{/tasks/{id}/open(id=${task.getId()})}">Просмотреть</a><br><br>
+</th:block>
+</body>
+</html>

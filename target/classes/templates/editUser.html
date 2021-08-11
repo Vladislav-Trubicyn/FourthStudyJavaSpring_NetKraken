@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование пользователя</title>
+</head>
+<body>
+<h3>Редактирование пользователя</h3>
+<form th:method="post" th:action="@{/users/edituser}" th:object="${user}">
+    <input type="hidden" th:field="*{id}"/>
+    <label>Имя пользователя: <input type="text" th:field="*{username}"/></label><br>
+    <label>Доступ к серису: <input type="checkbox" th:field="*{action}"/></label><br>
+    <h4>Список ролей</h4>
+    <div th:each="role : ${roles}">
+        <th:block th:if="${#lists.contains(user.getRoles(), role)}">
+            <input type="checkbox" th:name="${role}" th:id="${role}" checked><label th:for="${role}" th:text="${role}"/>
+        </th:block>
+        <th:block th:unless="${#lists.contains(user.getRoles(), role)}">
+            <input type="checkbox" th:name="${role}" th:id="${role}"><label th:for="${role}" th:text="${role}"/>
+        </th:block>
+    </div><br>
+    <input type="submit" value="Изменить">
+</form>
+<a href="/users">Назад</a>
+</body>
+</html>
