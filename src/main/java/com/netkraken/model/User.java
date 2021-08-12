@@ -18,6 +18,7 @@ public class User implements UserDetails
     private String password;
     private boolean action;
     private boolean status;
+    private String specialization;
 
     @Transient
     private Long selectedId;
@@ -85,6 +86,16 @@ public class User implements UserDetails
     public void setStatus(boolean status)
     {
         this.status = status;
+    }
+
+    public String getSpecialization()
+    {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization)
+    {
+        this.specialization = specialization;
     }
 
     public Long getSelectedId()

@@ -29,6 +29,11 @@ public class UserService implements UserDetailsService
         userRepository.save(user);
     }
 
+    public Iterable<User> findBySpecializationAndStatus(String specialization, boolean status)
+    {
+        return userRepository.findBySpecializationAndStatus(specialization, status);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {

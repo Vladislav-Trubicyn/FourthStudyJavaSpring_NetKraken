@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование задания</title>
+</head>
+<body>
+<h3>Редактирование задания</h3>
+<form th:method="patch" th:action="@{/tasks/edit}" th:object="${task}">
+    <label>Заголовк задания: <input type="text" th:field="*{title}"/></label><br>
+    <label>Описание: <textarea th:field="*{description}"></textarea></label><br>
+    <label>Количество разработчиков: <input type="number" th:field="*{countProgrammers}"/></label><br><br>
+    <input type="submit" value="Изменить">
+</form>
+</body>
+</html>

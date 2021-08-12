@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface TaskRepository extends CrudRepository<Task, Long>
 {
     Iterable<Task> findAllByUserId(Long id);
+    Task findById(long id);
 }

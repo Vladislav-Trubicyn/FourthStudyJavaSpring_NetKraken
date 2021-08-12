@@ -5,10 +5,12 @@
     <title>Технические задания</title>
 </head>
 <body>
+<div th:replace="/parts/navbar :: navbar"/>
 <h3>Технические задания</h3>
 <th:block th:each="task : ${tasks}">
     <div th:text="'Задание: ' + ${task.getTitle()}"></div>
-    <a th:href="@{/tasks/{id}/open(id=${task.getId()})}">Просмотреть</a><br><br>
+    <th:block th:if="${roleAdmin}"><a th:href="@{/tasks/{id}/formalization(id=${task.getId()})}">Оформить проект</a><br><br></th:block>
+    <th:block th:if="!${roleAdmin}"><a th:href="@{/tasks/{id}/edit(id=${task.getId()})}">Редактировать</a><br><br></th:block>
 </th:block>
 </body>
 </html>
