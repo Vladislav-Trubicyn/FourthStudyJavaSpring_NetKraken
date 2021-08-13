@@ -1,8 +1,10 @@
 package com.netkraken.controller;
 
+import com.netkraken.model.Project;
 import com.netkraken.model.Role;
 import com.netkraken.model.Task;
 import com.netkraken.model.User;
+import com.netkraken.service.ProjectService;
 import com.netkraken.service.TaskService;
 import com.netkraken.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class TaskController
 {
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private UserService userService;
@@ -79,23 +84,29 @@ public class TaskController
 
     @GetMapping("/{id}/formalization")
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('MANAGER')")
-    public String showAddProjectPage(@AuthenticationPrincipal User user, @PathVariable("id") Task task, Model model, @RequestParam(value = "filter", required = false) String filter)
+    public String showAddProjectPage(@AuthenticationPrincipal User user, @PathVariable("id") Task task, Model model)
     {
-        user.setSelectedId(task.getId());
-        model.addAttribute("task", task);
+        Project project = new Project();
+        project.setTitle(task.getTitle());
+        project.setTaskId(task.getId());
+        project.setCustomerId(task.getUserId());
+        project.setManagerId(user.getId());
+        project.setCountProgrammers(task.getCountProgrammers());
+        project.setStatus("Оформляется");
 
-        if(!filter.isEmpty())
+        if(projectService.findByTaskId(task.getId()) == null)
         {
-            model.addAttribute("users", userService.findBySpecializationAndStatus(filter, true));
+            projectService.saveProject(project);
+            user.setSelectedId(projectService.findByTaskId(task.getId()).getId());
+
+            return "redirect:/projects/" + user.getSelectedId() + "/edit";
         }
         else
         {
-            model.addAttribute("users", userService.findAllUsers());
+            return "redirect:/tasks";
         }
 
-        model.addAttribute("filter", filter);
 
-        return "addProject";
     }
 
 }

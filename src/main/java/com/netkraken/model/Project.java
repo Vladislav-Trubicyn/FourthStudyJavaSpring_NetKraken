@@ -14,7 +14,7 @@ public class Project
     private Long customerId;
     private Long managerId;
     private int countProgrammers;
-    private String satus;
+    private String status;
 
     public Long getId()
     {
@@ -76,13 +76,13 @@ public class Project
         this.countProgrammers = countProgrammers;
     }
 
-    public String getSatus()
+    public String getStatus()
     {
-        return satus;
+        return status;
     }
 
-    public void setSatus(String satus)
+    public void setStatus(String status)
     {
-        this.satus = satus;
+        this.status = status;
     }
 }
