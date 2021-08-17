@@ -9,7 +9,7 @@
 <h3>Список проектов</h3>
 <th:block th:each="project : ${projects}">
     <div th:text="'Название проекта: ' + ${project.getTitle()} + ' Статус: ' + ${project.getStatus()}"></div>
-    <a th:htef="@{/projects/{id}/edit(id=${project.getId()})}">Просмотреть</a><br><br>
+    <a th:href="@{/projects/{id}/edit(id=${project.getId()})}">Просмотреть</a><br><br>
 </th:block>
 </body>
 </html>

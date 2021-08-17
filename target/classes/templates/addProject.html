@@ -12,15 +12,20 @@
         <input type="submit" value="Найти">
     </form><br>
 </th:block>
-<form th:method="post" th:action="@{/projects/edit}" th:object="${project}">
+<form th:method="post" th:action="@{/projects/save}" th:object="${project}">
     <label>Заголовок проекта: <input type="text" th:field="*{title}"/></label>
     <div th:text="'Допустимое количество разработчиков ' + ${project.getCountProgrammers()}"/>
     <th:block th:if="${users}">
-        <h3>Список программистов</h3>
+        <h3>Список свободных программистов</h3>
         <th:block th:each="user : ${users}">
-            <div th:text="${user.getUsername()}"></div><br>
+            <th:block th:if="${#lists.contains(project.getProgrammers(), user)}">
+                <input type="checkbox" th:id="${user.getUsername()}" th:name="${user.getUsername()}" th:value="${user.getUsername()}" checked/><label th:text="${user.getUsername()}" th:for="${user.getUsername()}"></label><br>
+            </th:block>
+            <th:block th:unless="${#lists.contains(project.getProgrammers(), user)}">
+                <input type="checkbox" th:id="${user.getUsername()}" th:name="${user.getUsername()}" th:value="${user.getUsername()}"/><label th:text="${user.getUsername()}" th:for="${user.getUsername()}"></label><br>
+            </th:block>
         </th:block>
-    </th:block>
+    </th:block><br>
     <input type="submit" value="Создать проект">
 </form>
 </body>

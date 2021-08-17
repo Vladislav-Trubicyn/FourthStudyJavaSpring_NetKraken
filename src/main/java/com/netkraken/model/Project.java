@@ -1,6 +1,8 @@
 package com.netkraken.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -15,6 +17,10 @@ public class Project
     private Long managerId;
     private int countProgrammers;
     private String status;
+
+    @OneToMany
+    @JoinTable(name = "project_programmers", joinColumns = {@JoinColumn(name = "project_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    private Set<User> programmers = new HashSet<>();
 
     public Long getId()
     {
@@ -84,5 +90,15 @@ public class Project
     public void setStatus(String status)
     {
         this.status = status;
+    }
+
+    public Set<User> getProgrammers()
+    {
+        return programmers;
+    }
+
+    public void setProgrammers(Set<User> programmersId)
+    {
+        this.programmers = programmers;
     }
 }

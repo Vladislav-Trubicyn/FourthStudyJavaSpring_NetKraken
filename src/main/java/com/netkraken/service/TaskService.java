@@ -30,4 +30,9 @@ public class TaskService
     {
         return taskRepository.findById(id);
     }
+
+    public Iterable<Task> findAllByProject(boolean isProject)
+    {
+        return taskRepository.findAllByProject(isProject);
+    }
 }

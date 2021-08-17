@@ -15,6 +15,7 @@ public class Task
     private int price;
     private int hours;
     private int countProgrammers;
+    private boolean project;
 
     public Long getId()
     {
@@ -84,5 +85,15 @@ public class Task
     public void setCountProgrammers(int countProgrammers)
     {
         this.countProgrammers = countProgrammers;
+    }
+
+    public boolean isProject()
+    {
+        return project;
+    }
+
+    public void setProject(boolean project)
+    {
+        this.project = project;
     }
 }

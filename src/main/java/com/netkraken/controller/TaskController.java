@@ -32,7 +32,7 @@ public class TaskController
     {
         if(user.getRoles().contains(Role.ADMIN) || user.getRoles().contains(Role.MANAGER))
         {
-            model.addAttribute("tasks", taskService.findAllTasks());
+            model.addAttribute("tasks", taskService.findAllByProject(false));
             model.addAttribute("roleAdmin", true);
         }
         else if(user.getRoles().contains(Role.USER))
@@ -54,6 +54,7 @@ public class TaskController
     public String addNewTask(@AuthenticationPrincipal User user, @ModelAttribute Task task)
     {
         task.setUserId(user.getId());
+        task.setProject(false);
         taskService.saveTask(task);
         return "redirect:/tasks";
     }
@@ -93,6 +94,9 @@ public class TaskController
         project.setManagerId(user.getId());
         project.setCountProgrammers(task.getCountProgrammers());
         project.setStatus("Оформляется");
+
+        task.setProject(true);
+        taskService.saveTask(task);
 
         if(projectService.findByTaskId(task.getId()) == null)
         {
