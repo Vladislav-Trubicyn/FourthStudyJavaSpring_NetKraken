@@ -9,4 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long>
 {
     User findByUsername(String username);
     Iterable<User> findBySpecializationAndStatus(String specialization, boolean status);
+    Iterable<User> findAllByProject(Long project);
+    Iterable<User> findAllByStatus(boolean isStatus);
 }

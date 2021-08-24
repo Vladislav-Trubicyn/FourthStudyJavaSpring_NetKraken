@@ -55,6 +55,7 @@ public class TaskController
     {
         task.setUserId(user.getId());
         task.setProject(false);
+        task.setPrice(0);
         taskService.saveTask(task);
         return "redirect:/tasks";
     }

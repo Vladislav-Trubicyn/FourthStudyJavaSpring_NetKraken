@@ -19,6 +19,11 @@ public class UserService implements UserDetailsService
         return userRepository.findAll();
     }
 
+    public Iterable<User> findAllByStatus(boolean isStatus)
+    {
+        return userRepository.findAllByStatus(isStatus);
+    }
+
     public User findByUsername(String username)
     {
         return userRepository.findByUsername(username);
@@ -32,6 +37,11 @@ public class UserService implements UserDetailsService
     public Iterable<User> findBySpecializationAndStatus(String specialization, boolean status)
     {
         return userRepository.findBySpecializationAndStatus(specialization, status);
+    }
+
+    public Iterable<User> findAllByProject(Long project)
+    {
+        return userRepository.findAllByProject(project);
     }
 
     @Override

@@ -19,6 +19,7 @@ public class User implements UserDetails
     private boolean action;
     private boolean status;
     private String specialization;
+    private Long project;
 
     @Transient
     private Long selectedId;
@@ -96,6 +97,16 @@ public class User implements UserDetails
     public void setSpecialization(String specialization)
     {
         this.specialization = specialization;
+    }
+
+    public Long getProject()
+    {
+        return project;
+    }
+
+    public void setProject(Long project)
+    {
+        this.project = project;
     }
 
     public Long getSelectedId()

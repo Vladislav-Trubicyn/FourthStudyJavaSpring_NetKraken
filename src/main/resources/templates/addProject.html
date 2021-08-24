@@ -13,20 +13,23 @@
     </form><br>
 </th:block>
 <form th:method="post" th:action="@{/projects/save}" th:object="${project}">
-    <label>Заголовок проекта: <input type="text" th:field="*{title}"/></label>
-    <div th:text="'Допустимое количество разработчиков ' + ${project.getCountProgrammers()}"/>
-    <th:block th:if="${users}">
-        <h3>Список свободных программистов</h3>
-        <th:block th:each="user : ${users}">
-            <th:block th:if="${#lists.contains(project.getProgrammers(), user)}">
-                <input type="checkbox" th:id="${user.getUsername()}" th:name="${user.getUsername()}" th:value="${user.getUsername()}" checked/><label th:text="${user.getUsername()}" th:for="${user.getUsername()}"></label><br>
-            </th:block>
-            <th:block th:unless="${#lists.contains(project.getProgrammers(), user)}">
-                <input type="checkbox" th:id="${user.getUsername()}" th:name="${user.getUsername()}" th:value="${user.getUsername()}"/><label th:text="${user.getUsername()}" th:for="${user.getUsername()}"></label><br>
-            </th:block>
+    <label>Заголовок проекта: <input type="text" th:field="*{title}"/></label><br>
+    <label>Стоимость проекта: <input type="number" name="price" th:value="${price}"/></label><br>
+    <input type="submit" value="Изменить">
+    <th:block th:if="${selectedUsers.size()} > 0">
+        <h3 th:text="'Список выбранных программистов ' + ${selectedUsers.size()} + ' из ' + ${project.getCountProgrammers()}"></h3>
+        <th:block th:each="user : ${selectedUsers}">
+            <div th:text="'Имя: ' + ${user.getUsername()}"></div>
+            <a th:href="@{/projects/user/{id}/delete(id=${user.getId()})}">Удалить</a><br><br>
         </th:block>
     </th:block><br>
-    <input type="submit" value="Создать проект">
+    <th:block th:if="${users.size()} > 0">
+        <h3>Список свободных программистов</h3>
+        <th:block th:each="user : ${users}">
+            <div th:text="'Имя: ' + ${user.getUsername()}"></div>
+            <a th:href="@{/projects/user/{id}/select(id=${user.getId()})}">Выбрать</a><br><br>
+        </th:block>
+    </th:block><br>
 </form>
 </body>
 </html>

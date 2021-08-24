@@ -13,11 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 @Controller
 @RequestMapping("/projects")
 @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('MANAGER')")
@@ -25,6 +20,9 @@ public class ProjectController
 {
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Autowired
     private UserService userService;
@@ -52,46 +50,70 @@ public class ProjectController
             user.setSelectedId(id);
         }
 
+        model.addAttribute("selectedUsers" , projectService.findById(user.getSelectedId()).get().getProgrammers());
+
         if(!filter.isEmpty())
         {
             model.addAttribute("users", userService.findBySpecializationAndStatus(filter, true));
         }
         else
         {
-            model.addAttribute("users", userService.findAllUsers());
+            model.addAttribute("users", userService.findAllByStatus(true));
         }
 
+        Project project = projectService.findById(user.getSelectedId()).get();
+
         model.addAttribute("filter", filter);
-        model.addAttribute("project", projectService.findById(user.getSelectedId()).get());
+        model.addAttribute("project", project);
+        model.addAttribute("price", taskService.findById(project.getTaskId()).getPrice());
 
         return "addProject";
     }
 
-    @PostMapping("/save")
-    public String saveSelectedProject(@AuthenticationPrincipal User user,
-                                      @RequestParam Map<String, String> form,
-                                      @RequestParam("title") String title)
+    @GetMapping("/user/{id}/select")
+    public String selectingUserForSelectedProject(@AuthenticationPrincipal User user, @PathVariable("id") User selectUser)
     {
-        Optional<Project> project = projectService.findById(user.getSelectedId());
+        Project project = projectService.findById(user.getSelectedId()).get();
 
-        project.get().setTitle(title);
-
-        project.get().getProgrammers().clear();
-
-        User addedUser;
-
-        for(String key : form.keySet())
+        if(project.getProgrammers().size() < project.getCountProgrammers())
         {
-            if(!project.get().getProgrammers().contains(userService.findByUsername(key)))
-            {
-                addedUser = userService.findByUsername(key);
-                project.get().getProgrammers().add(addedUser);
-                addedUser.setStatus(false);
-                userService.saveUser(addedUser);
-            }
+            project.getProgrammers().add(selectUser);
+            selectUser.setProject(user.getSelectedId());
+            selectUser.setStatus(false);
+            userService.saveUser(selectUser);
+            projectService.saveProject(project);
         }
 
-        projectService.saveProject(project.get());
+        return "redirect:/projects/" + user.getSelectedId() + "/edit";
+    }
+
+    @GetMapping("/user/{id}/delete")
+    public String deleteSelectingUserFromSelectedProject(@AuthenticationPrincipal User user, @PathVariable("id") User selectUser)
+    {
+        Project project = projectService.findById(user.getSelectedId()).get();
+
+        project.getProgrammers().remove(selectUser);
+        selectUser.setProject(null);
+        selectUser.setStatus(true);
+        userService.saveUser(selectUser);
+        projectService.saveProject(project);
+
+        return "redirect:/projects/" + user.getSelectedId() + "/edit";
+    }
+
+    @PostMapping("/save")
+    public String saveSelectedProject(@AuthenticationPrincipal User user,
+                                      @RequestParam("title") String title,
+                                      @RequestParam("price") int price)
+    {
+        Project project = projectService.findById(user.getSelectedId()).get();
+
+        Task task = taskService.findById(project.getTaskId());
+
+        project.setTitle(title);
+        task.setPrice(price);
+        taskService.saveTask(task);
+        projectService.saveProject(project);
 
         return "redirect:/projects/" + user.getSelectedId() + "/edit";
     }
